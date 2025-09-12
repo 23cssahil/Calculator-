@@ -3,33 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Vote for Prakhar Tripathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* A simple style for the body to ensure content is centered */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body><bg><up</bg>
-    <h1 style="color:red"><b>Developed By Sahil Khan</b></h1>
-    <p><b>A SImple Calculator for Simple calculations</b></p>
-    <div class="calculator">
-        <input type="text" id="display" disabled />
-        <div class="buttons">
-            <button onclick="clearDisplay()">C</button>
-            <button onclick="appendToDisplay('7')">7</button>
-            <button onclick="appendToDisplay('8')">8</button>
-            <button onclick="appendToDisplay('9')">9</button>
-            <button onclick="appendToDisplay('/')">/</button>
-            <button onclick="appendToDisplay('4')">4</button>
-            <button onclick="appendToDisplay('5')">5</button>
-            <button onclick="appendToDisplay('6')">6</button>
-            <button onclick="appendToDisplay('*')">*</button>
-            <button onclick="appendToDisplay('1')">1</button>
-            <button onclick="appendToDisplay('2')">2</button>
-            <button onclick="appendToDisplay('3')">3</button>
-            <button onclick="appendToDisplay('-')">-</button>
-            <button onclick="appendToDisplay('0')">0</button>
-            <button onclick="calculateResult()">=</button>
-            <button onclick="appendToDisplay('+')">+</button>
+<body class="bg-gradient-to-r from-orange-400 via-white to-green-400 text-gray-800">
+
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl md:text-6xl font-extrabold text-center text-gray-900 mb-8 shadow-sm">A Message for You!</h1>
+        <div id="message-container" class="bg-white bg-opacity-80 rounded-lg shadow-xl p-6 text-center break-words">
+            <!-- JavaScript will automatically populate this section -->
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // This function runs automatically when the page is loaded
+        window.onload = function() {
+            // Get the container element where messages will be displayed
+            const container = document.getElementById('message-container');
+            
+            // The message to be displayed, wrapped in bold tags
+            const message = "<b>Vote for prakhar tripathi</b>";
+            
+            // The number of times to print the message
+            const repeatCount = 100000;
+
+            // To make the page load faster, we build one big string of HTML
+            // and add it to the page all at once.
+            let allMessagesHTML = '';
+
+            for (let i = 0; i < repeatCount; i++) {
+                // Add the message with a line number and a line break to the string
+                allMessagesHTML += `<p class="my-1 text-lg">${i + 1}. ${message}</p>`;
+            }
+
+            // Set the inner HTML of the container to our generated string of messages
+            // The browser may take a moment to render all 100,000 lines.
+            container.innerHTML = allMessagesHTML;
+        };
+    </script>
+
 </body>
 </html>
+
