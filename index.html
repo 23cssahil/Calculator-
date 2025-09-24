@@ -1,53 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vote for Prakhar Tripathi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* A simple style for the body to ensure content is centered */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Sab Kuch Bhula Diya - Emotional Slideshow</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: linear-gradient(135deg, #434343 0%, #1a1a1a 100%);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+    #passwordGate {
+      position: fixed;
+      inset: 0;
+      background: rgba(20,20,30,0.96);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+    }
+    #passwordGate input[type="password"] {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #666;
+      font-size: 1.2rem;
+      margin-top: 15px;
+      background: #252525;
+      color: #eee;
+      outline: none;
+    }
+    #passwordGate button {
+      margin-top: 20px;
+      padding: 9px 26px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .slideshow-container {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .slide-image {
+      max-width: 95vw;
+      max-height: 80vh;
+      object-fit: contain;
+      box-shadow: 0 0 60px #222;
+      border-radius: 18px;
+      border: 4px solid #222;
+      transition: filter 1s;
+      filter: grayscale(60%) brightness(70%) drop-shadow(0 0 30px #2d3345);
+    }
+    .overlay-text {
+      position: absolute;
+      bottom: 11%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      color: #F5CEE6;
+      background: rgba(30,20,34,0.8);
+      text-align: center;
+      font-size: 2.2vw;
+      padding: 12px 26px;
+      border-radius: 14px;
+      letter-spacing: 1.2px;
+      font-family: 'Segoe UI', sans-serif;
+      font-style: italic;
+      box-shadow: 0 0 16px #2d334550;
+    }
+    @media (max-width:600px){
+      .slide-image {
+        max-width: 98vw;
+        max-height: 55vh;
+      }
+      .overlay-text {
+        font-size: 5vw;
+        padding: 10px 2vw;
+      }
+    }
+    #youtube-player {
+      position: fixed;
+      bottom: 1vw;
+      right: 1vw;
+      z-index: 10;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-r from-orange-400 via-white to-green-400 text-gray-800">
-
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl md:text-6xl font-extrabold text-center text-gray-900 mb-8 shadow-sm">A Message for You!</h1>
-        <div id="message-container" class="bg-white bg-opacity-80 rounded-lg shadow-xl p-6 text-center break-words">
-            <!-- JavaScript will automatically populate this section -->
-        </div>
+<body>
+  <div id="passwordGate">
+    <h2>Emotion Slideshow</h2>
+    <div>Enter password to view memories:</div>
+    <input id="passwordInput" type="password" placeholder="Enter password">
+    <button onclick="checkPass()">Unlock</button>
+    <div id="errorMsg" style="color:#B71C1C; margin-top:12px; font-size:1.1rem;"></div>
+  </div>
+  <div id="mainContent" style="display:none;">
+    <div class="slideshow-container">
+      <img id="slideshowImg" class="slide-image" src="" alt="Emotion Memory">
+      <div class="overlay-text">सब कुछ भुला दिया ये वफ़ा का कैसा सिला दिया</div>
     </div>
+    <div id="youtube-player">
+      <!-- YouTube Player injected by JS -->
+    </div>
+  </div>
+  <script>
+    // Password gate logic
+    function checkPass() {
+      const pass = document.getElementById('passwordInput').value;
+      if (pass==='83183'){
+        document.getElementById('passwordGate').style.display='none';
+        document.getElementById('mainContent').style.display='block';
+        startSlideshow();
+        embedYoutube();
+      } else {
+        document.getElementById('errorMsg').innerText = "Wrong password!";
+      }
+    }
+    // Disable right click and hotkeys
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.onkeydown = function(e){
+      if (e.ctrlKey || e.metaKey || e.key==='F12'){
+        e.preventDefault();
+        return false;
+      }
+      if(['F12','F6','I','J','U','S','E','C'].includes(e.key) && e.ctrlKey){
+        e.preventDefault();
+        return false;
+      }
+    };
 
-    <script>
-        // This function runs automatically when the page is loaded
-        window.onload = function() {
-            // Get the container element where messages will be displayed
-            const container = document.getElementById('message-container');
-            
-            // The message to be displayed, wrapped in bold tags
-            const message = "<b>Vote for prakhar tripathi</b>";
-            
-            // The number of times to print the message
-            const repeatCount = 100000;
+    // Slideshow
+    const images = [
+      'your-image1.jpg',
+      'your-image2.jpg',
+      'your-image3.jpg'
+      // Add more images here
+    ];
+    let idx=0;
+    let slideshowInterval = null;
 
-            // To make the page load faster, we build one big string of HTML
-            // and add it to the page all at once.
-            let allMessagesHTML = '';
+    function startSlideshow(){
+      document.getElementById('slideshowImg').src = images[0];
+      idx=0;
+      slideshowInterval = setInterval(()=>{
+        idx = (idx + 1) % images.length;
+        document.getElementById('slideshowImg').src = images[idx];
+      }, 3600); // Change slide every 3.6 seconds
+    }
 
-            for (let i = 0; i < repeatCount; i++) {
-                // Add the message with a line number and a line break to the string
-                allMessagesHTML += `<p class="my-1 text-lg">${i + 1}. ${message}</p>`;
-            }
-
-            // Set the inner HTML of the container to our generated string of messages
-            // The browser may take a moment to render all 100,000 lines.
-            container.innerHTML = allMessagesHTML;
-        };
-    </script>
-
+    // YouTube embed hidden autoplay
+    function embedYoutube(){
+      const ytDiv = document.getElementById('youtube-player');
+      ytDiv.innerHTML = `<iframe width="1" height="1" 
+        src="https://www.youtube.com/embed/un-_IgJRonY?autoplay=1&loop=1&playlist=un-_IgJRonY&controls=0&mute=0"
+        frameborder="0" allow="autoplay" allowfullscreen style="display:none;"></iframe>`;
+    }
+  </script>
 </body>
 </html>
-
